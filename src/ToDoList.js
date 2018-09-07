@@ -6,8 +6,8 @@ class ToDoList {
     }
 
     render() {
-        let rows = this.list.data.map(item => `<tr id=${item.id}>
-                                              <td>${item.name}</td>
+        let rows = this.list.data.map(item => `<tr id=${item.id}>           
+                                              <td><input value=${item.name}></td>
                                               <td>
                                                 <select id="mySelect">
                                                     <option value="1" ${item.status === 1 ? 'selected' : ''} >Do To</option>
@@ -18,6 +18,7 @@ class ToDoList {
                                           </tr>`);
         this.container.innerHTML = `<table id = 'info'>${rows}</table>`;
         this.list.data.map(n => document.getElementById(`${n.id}`).onclick = this.TrOnClick.bind(this));
+        this.list.data.map(n => document.getElementById(`${n.id}`).addEventListener('focusout', this.blur.bind(this)));
         let selects = document.getElementsByTagName('select')
         for (let i = 0; i < selects.length; i++) {
             selects[i].onchange = this.onChange.bind(this);
@@ -38,15 +39,29 @@ class ToDoList {
         }
     }
 
-    onChange(event) {
-        let selector = event.target;
-        let tr = selector.parentElement.parentElement;
+    onChange(target) {
+        let tr = target.parentElement.parentElement;
         let id = parseInt(tr.getAttribute("id"));
-        let selectedIndex = selector.selectedIndex;
-        let value = parseInt(selector.options[selectedIndex].value);
+        let selectedIndex = target.selectedIndex;
+        let value = parseInt(target.options[selectedIndex].value);
         this.list.data.find(n => n.id === id).status = value;
+    }
+
+    onInputChange(target) {
+        let id = parseInt(target.parentElement.parentElement.getAttribute('id'));
+        let name = target.getAttribute('value');
+        this.list.data.find(n => n.id === id).name = name;
+    }
+
+    save(target) {
+        if (target.nodeName === "INPUT") this.onInputChange(target);
+        if (target.nodeName === "SELECT") this.onChange(target);
 
         console.log(this.list.data);
+    }
+
+    blur(event) {
+        this.save(event.target);
         this.refresh();
     }
 
