@@ -1,11 +1,11 @@
 class Model {
     constructor() {
         this.data = [
-            {name: "test1", status: 1},
-            {name: "test2", status: 2},
-            {name: "test3", status: 3},
-            {name: "test4", status: 1},
-            {name: "test5", status: 2}
+            {id: 1, name: "test1", status: 1},
+            {id: 2, name: "test2", status: 2},
+            {id: 3, name: "test3", status: 3},
+            {id: 4, name: "test4", status: 1},
+            {id: 5, name: "test5", status: 2}
         ];
 
         this.handlers = {};
