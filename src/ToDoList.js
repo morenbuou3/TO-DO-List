@@ -5,23 +5,22 @@ class ToDoList {
         this.actionButtons = actionButtons;
     }
 
-    render() {
-        let rows = this.list.data.map(item => `<tr id=${item.id}>           
-                                              <td><input value=${item.name}></td>
-                                              <td>
-                                                <select id="mySelect">
-                                                    <option value="1" ${item.status === 1 ? 'selected' : ''} >Do To</option>
-                                                    <option value="2" ${item.status === 2 ? 'selected' : ''}>Finished</option>
-                                                    <option value="3" ${item.status === 3 ? 'selected' : ''}>Blocked</option>
-                                                </select>
-                                              </td>
-                                          </tr>`);
-        this.container.innerHTML = `<table id = 'info'>${rows}</table>`;
+    render(data) {
+        this.rows = ToDoList.getRows(data ? data : this.list.data);
+        this.container.innerHTML = `<input id="query"/>`;
+        this.container.innerHTML += `<table id = 'info'>${this.rows}</table>`;
+        document.getElementById('query').onkeypress = this.query.bind(this);
         this.list.data.map(n => document.getElementById(`${n.id}`).onclick = this.TrOnClick.bind(this));
         this.list.data.map(n => document.getElementById(`${n.id}`).addEventListener('focusout', this.blur.bind(this)));
-        let selects = document.getElementsByTagName('select')
-        for (let i = 0; i < selects.length; i++) {
-            selects[i].onchange = this.onChange.bind(this);
+    }
+
+    query(event) {
+        if(event.keyCode===13) {
+            let name = event.target.value;
+            if (name) {
+                var data = this.list.data.filter(n => n.name.indexOf(name) !== -1);
+            }
+            this.refresh(data);
         }
     }
 
@@ -49,7 +48,7 @@ class ToDoList {
 
     onInputChange(target) {
         let id = parseInt(target.parentElement.parentElement.getAttribute('id'));
-        let name = target.getAttribute('value');
+        let name = target.value;
         this.list.data.find(n => n.id === id).name = name;
     }
 
@@ -65,9 +64,22 @@ class ToDoList {
         this.refresh();
     }
 
-    refresh() {
-        this.model.handle("toDoList");
-        this.model.handle("barCharts");
+    refresh(data) {
+        this.list.handle("toDoList", data);
+        this.list.handle("barCharts");
+    }
+
+    static getRows(itemList) {
+        return itemList.map(item => `<tr id=${item.id}>           
+                                              <td><input value=${item.name}></td>
+                                              <td>
+                                                <select id="mySelect">
+                                                    <option value="1" ${item.status === 1 ? 'selected' : ''} >Do To</option>
+                                                    <option value="2" ${item.status === 2 ? 'selected' : ''}>Finished</option>
+                                                    <option value="3" ${item.status === 3 ? 'selected' : ''}>Blocked</option>
+                                                </select>
+                                              </td>
+                                          </tr>`);
     }
 }
 

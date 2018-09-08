@@ -22,11 +22,11 @@ class Model {
         this.handlers[type].push(handler);
     }
 
-    handle(type) {
+    handle(type, data) {
         if (this.handlers[type] instanceof Array) {
             var handlers = this.handlers[type];
             for (var i = 0, len = handlers.length; i < len; i++) {
-                handlers[i]();
+                handlers[i](data);
             }
         }
     }
