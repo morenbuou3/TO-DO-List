@@ -55,8 +55,6 @@ class ToDoList {
     save(target) {
         if (target.nodeName === "INPUT") this.onInputChange(target);
         if (target.nodeName === "SELECT") this.onChange(target);
-
-        console.log(this.list.data);
     }
 
     blur(event) {
@@ -70,7 +68,7 @@ class ToDoList {
     }
 
     static getRows(itemList) {
-        return itemList.map(item => `<tr id=${item.id}>           
+        return itemList.reduce((acc,item) => acc + `<tr id=${item.id}>           
                                               <td><input value=${item.name}></td>
                                               <td>
                                                 <select id="mySelect">
@@ -79,7 +77,7 @@ class ToDoList {
                                                     <option value="3" ${item.status === 3 ? 'selected' : ''}>Blocked</option>
                                                 </select>
                                               </td>
-                                          </tr>`);
+                                          </tr>`, ``);
     }
 }
 
