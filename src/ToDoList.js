@@ -7,7 +7,7 @@ class ToDoList {
 
     render(data) {
         this.rows = ToDoList.getRows(data ? data : this.list.data);
-        this.container.innerHTML = `<div class="wrapper"><i class="fa fa-search"></i><input id="query"/></div>`;
+        this.container.innerHTML = `<div class="wrapper"><i class="fa fa-search"></i><input id="query" placeholder="Search..."/></div>`;
         this.container.innerHTML += `<table id = 'info'>${this.rows}</table>`;
         document.getElementById('query').onkeypress = this.query.bind(this);
         this.list.data.map(n => document.getElementById(`${n.id}`).onclick = this.TrOnClick.bind(this));
