@@ -72,7 +72,7 @@ class ToDoList {
                                               <td><input value=${item.name}></td>
                                               <td>
                                                 <select id="mySelect">
-                                                    <option value="1" ${item.status === 1 ? 'selected' : ''} >Do To</option>
+                                                    <option value="1" ${item.status === 1 ? 'selected' : ''} >To Do</option>
                                                     <option value="2" ${item.status === 2 ? 'selected' : ''}>Finished</option>
                                                     <option value="3" ${item.status === 3 ? 'selected' : ''}>Blocked</option>
                                                 </select>
