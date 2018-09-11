@@ -1,17 +1,18 @@
 class ToDoList {
-    constructor(model, container, actionButtons) {
+    constructor(model, container, actionButtons, store) {
         this.list = model;
         this.container = container;
         this.actionButtons = actionButtons;
+        this.store = store;
     }
 
     render(data) {
-        this.rows = ToDoList.getRows(data ? data : this.list.data);
+        this.rows = ToDoList.getRows(data ? data : this.store.getState());
         this.container.innerHTML = `<div class="wrapper"><i class="fa fa-search"></i><input id="query" placeholder="Search..."/></div>`;
         this.container.innerHTML += `<table id = 'info'>${this.rows}</table>`;
         document.getElementById('query').onkeypress = this.query.bind(this);
-        this.list.data.map(n => document.getElementById(`${n.id}`).onclick = this.TrOnClick.bind(this));
-        this.list.data.map(n => document.getElementById(`${n.id}`).addEventListener('focusout', this.blur.bind(this)));
+        this.store.getState().map(n => document.getElementById(`${n.id}`).onclick = this.TrOnClick.bind(this));
+        this.store.getState().map(n => document.getElementById(`${n.id}`).addEventListener('focusout', this.blur.bind(this)));
     }
 
     query(event) {
@@ -42,14 +43,17 @@ class ToDoList {
         let tr = target.parentElement.parentElement;
         let id = parseInt(tr.getAttribute("id"));
         let selectedIndex = target.selectedIndex;
-        let value = parseInt(target.options[selectedIndex].value);
-        this.list.data.find(n => n.id === id).status = value;
+        let status = parseInt(target.options[selectedIndex].value);
+        let item = this.store.getState().find(n => n.id === id);
+        this.store.dispatch({type: 'updateItem', item: {id: id, name: item.name, status: status}});
     }
 
     onInputChange(target) {
         let id = parseInt(target.parentElement.parentElement.getAttribute('id'));
         let name = target.value;
-        this.list.data.find(n => n.id === id).name = name;
+        this.store.getState().find(n => n.id === id).name = name;
+        let item = this.store.getState().find(n => n.id === id);
+        this.store.dispatch({type: 'updateItem', item: {id: id, name: value, status: item.status}});
     }
 
     save(target) {
@@ -59,13 +63,13 @@ class ToDoList {
 
     blur(event) {
         this.save(event.target);
-        this.refresh();
+        // this.refresh();
     }
 
-    refresh(data) {
-        this.list.handle("toDoList", data);
-        this.list.handle("barCharts");
-    }
+    // refresh(data) {
+    //     this.list.handle("toDoList", data);
+    //     this.list.handle("barCharts");
+    // }
 
     static getRows(itemList) {
         return itemList.reduce((acc,item) => acc + `<tr id=${item.id}>           

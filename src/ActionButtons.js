@@ -1,8 +1,9 @@
 
 class ActionButtons {
-    constructor(model, container) {
+    constructor(model, container, store) {
         this.model = model;
         this.container = container;
+        this.store = store;
     }
 
     render() {
@@ -12,19 +13,20 @@ class ActionButtons {
     }
 
     addRow() {
-        let id = this.model.data.reduce((a, b) => a.id > b.id ? a : b).id + 1;
-        this.model.data.push({id: id, name:'', status: 1});
-        this.refresh();
+        this.store.dispatch({ type: 'addRow', item: {id: this.store.getState().length + 1, name:'', status: 1} });
+        // this.model.data.push({id: id, name:'', status: 1});
+        // this.refresh();
     }
 
     deleteRow() {
         if (this.selectedElement) {
-            for (var i = 0, len = this.model.data.length; i < len; i++) {
-                if (this.model.data[i].id === this.selectedElement) {
-                    break;
-                }
-            }
-            this.model.data.splice(i, 1);
+            // for (var i = 0, len = this.store.getState().length; i < len; i++) {
+            //     if (this.store.getState()[i].id === this.selectedElement) {
+            //         break;
+            //     }
+            // }
+            this.store.dispatch({ type: 'deleteRow', id: this.selectedElement});
+            // this.model.data.splice(i, 1);
         }
         this.refresh();
     }
