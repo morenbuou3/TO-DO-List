@@ -63,13 +63,7 @@ class ToDoList {
 
     blur(event) {
         this.save(event.target);
-        // this.refresh();
     }
-
-    // refresh(data) {
-    //     this.list.handle("toDoList", data);
-    //     this.list.handle("barCharts");
-    // }
 
     static getRows(itemList) {
         return itemList.reduce((acc,item) => acc + `<tr id=${item.id}>           

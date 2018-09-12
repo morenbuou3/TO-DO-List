@@ -38,10 +38,6 @@ const startup = () => {
     });
 
     store.dispatch({type:''});
-    //
-    // actionButtons.render();
-    // toDoList.render();
-    // barCharts.render();
 
     toDoListModel.addHandler("actionButtons", actionButtons.render.bind(actionButtons));
     toDoListModel.addHandler("toDoList", toDoList.render.bind(toDoList));
