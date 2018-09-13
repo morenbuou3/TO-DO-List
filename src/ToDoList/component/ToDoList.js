@@ -4,41 +4,44 @@ class ToDoList extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            queryName: '',
+        }
     }
 
     render() {
+        let itemList = this.state.queryName === '' ? this.props.items : this.props.items.filter(m => m.name.indexOf(this.state.queryName) !== -1);
         return (
             <div className="wrapper">
-                <i className="fa fa-search"/><input onKeyPress={this.query.bind(this)} placeholder="Search..."/>
+                <i className="fa fa-search"/>
+                <input onChange={this.handleChange.bind(this)}
+                       ref={(ref) => this.query = ref}
+                       placeholder="Search..."/>
                 <table id='info'>
                     <tbody>
-                    {this.props.items.map((n, index) => (
-                        <tr key={index} id={n.id} onClick={this.TrOnClick.bind(this)} onBlur={this.blur.bind(this)}>
-                            <td><input defaultValue={n.name} /></td>
-                            <td>
-                                <select id="mySelect" defaultValue={n.status}>
-                                    <option value="1" >To Do</option>
-                                    <option value="2" >Finished</option>
-                                    <option value="3" >Blocked</option>
-                                </select>
-                            </td>
-                        </tr>
-                    ))}
+                    {
+                        itemList.map((n, index) => (
+                            <tr key={index} id={n.id} onClick={this.TrOnClick.bind(this)} onBlur={this.blur.bind(this)}>
+                                <td><input defaultValue={n.name}/></td>
+                                <td>
+                                    <select id="mySelect" defaultValue={n.status}>
+                                        <option value="1">To Do</option>
+                                        <option value="2">Finished</option>
+                                        <option value="3">Blocked</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        ))
+                    }
                     </tbody>
                 </table>
             </div>
         );
     }
 
-    query(event) {
-        if (event.keyCode === 13) {
-            let name = event.target.value;
-            if (name) {
-                var data = this.props.items.filter(n => n.name.indexOf(name) !== -1);
-            }
-            this.refresh(data);
-        }
-    }
+    handleChange() {
+        this.setState({queryName: this.query.value});
+    };
 
     TrOnClick(event) {
         let tbl = document.getElementById("info");
